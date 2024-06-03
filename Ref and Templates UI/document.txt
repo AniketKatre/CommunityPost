@@ -1,0 +1,6 @@
+Community Post app
+
+ Templates: https://github.com/tweneboah/mern-stack-project-based-course/tree/main/mern-blog-project/18.V5-User-Dashboard-Data/frontend/src/components/Templates
+
+
+ Project Repo OG: https://github.com/tweneboah/mern-stack-project-based-course/tree/main/mern-blog-project 
