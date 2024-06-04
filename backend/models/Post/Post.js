@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 //schema
 const postSchema = new mongoose.Schema(
   {
+    title: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
     image: {
       type: Object,
@@ -10,7 +11,7 @@ const postSchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
     nextEarningDate: {
       type: Date,
@@ -39,6 +40,6 @@ const postSchema = new mongoose.Schema(
 );
 
 //models
-const postModel = mongoose.model("Plan", postSchema);
+const postModel = mongoose.model("Posts", postSchema);
 
 module.exports = postModel;
