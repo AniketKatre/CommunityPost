@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+const cors = require("cors");
 const connectDB = require("./config/db");
 const Post = require("./models/Post/Post");
 const PORT = process.env.PORT || 5001;
@@ -11,6 +12,13 @@ connectDB();
 
 //middleware
 app.use(express.json());
+//corse middleware
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 //routes
 //Create POST

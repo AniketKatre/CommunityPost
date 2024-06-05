@@ -1,8 +1,15 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { createPostAPI } from "../../APIServices/posts/postsAPI";
 
 const CreatePost = () => {
+  const postMutation = useMutation({
+    mutationKey: ["createPost"],
+    mutationFn: createPostAPI,
+  });
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -15,14 +22,36 @@ const CreatePost = () => {
 
     //submit handler
     onSubmit: (values) => {
-      console.log(values);
+      //   console.log(values);
+      const postData = {
+        title: values.title,
+        description: values.description,
+      };
+      postMutation.mutate(postData);
     },
   });
+
+  //get loading state
+  const isLoading = postMutation.isPending;
+  //IsErr
+  const isError = postMutation.isError;
+  //success
+  const isSuccess = postMutation.isSuccess;
+  //Error
+  const error = postMutation.error;
 
   return (
     <>
       <div>
         <h2>Create Post Page</h2>
+        {isLoading && <p style={{ color: "orange" }}>Loading.........</p>}
+
+        {isError && <p style={{ color: "red" }}>{error.message}</p>}
+
+        {isSuccess && (
+          <p style={{ color: "green" }}>POST created succesfully</p>
+        )}
+
         <form onSubmit={formik.handleSubmit}>
           <input
             type="text"
