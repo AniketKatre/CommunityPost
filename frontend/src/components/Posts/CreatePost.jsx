@@ -39,6 +39,7 @@ const CreatePost = () => {
   const isSuccess = postMutation.isSuccess;
   //Error
   const error = postMutation.error;
+  const errorMSG = postMutation?.error?.response.data.message;
 
   return (
     <>
@@ -47,6 +48,7 @@ const CreatePost = () => {
         {isLoading && <p style={{ color: "orange" }}>Loading.........</p>}
 
         {isError && <p style={{ color: "red" }}>{error.message}</p>}
+        {isError && <p style={{ color: "red" }}>{errorMSG}</p>}
 
         {isSuccess && (
           <p style={{ color: "green" }}>POST created succesfully</p>
