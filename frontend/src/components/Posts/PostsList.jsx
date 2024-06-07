@@ -105,8 +105,8 @@ const PostsList = () => {
                       <div className="absolute bottom-0 right-0 z-10"></div>
                       <img
                         className="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                        src="https://cdn.pixabay.com/photo/2022/10/04/21/25/xr-7499160_1280.jpg"
-                        alt="saple img"
+                        src={post?.image?.path}
+                        alt={post?.image?.fieldname}
                       />
                     </div>
                     <div className="pt-6 pb-3 px-4">

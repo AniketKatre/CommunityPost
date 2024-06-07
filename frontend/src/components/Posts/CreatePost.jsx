@@ -5,10 +5,14 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useMutation } from "@tanstack/react-query";
 import { createPostAPI } from "../../APIServices/posts/postsAPI";
+import { FaTimesCircle } from "react-icons/fa";
 
 const CreatePost = () => {
   // state for wysiwg
   const [description, setDescription] = useState("");
+  //file upload state
+  const [imageError, setImageErr] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
 
   const postMutation = useMutation({
     mutationKey: ["createPost"],
@@ -18,20 +22,59 @@ const CreatePost = () => {
   const formik = useFormik({
     initialValues: {
       description: "",
+      image: "",
     },
     validationSchema: Yup.object({
       description: Yup.string().required("Description is required"),
+      image: Yup.string().required("Image is required"),
     }),
 
     //submit handler
     onSubmit: (values) => {
       //   console.log(values);
-      const postData = {
-        description: values.description,
-      };
-      postMutation.mutate(postData);
+      // const postData = {
+      //   description: values.description,
+      // };
+
+      //form data
+      const formData = new FormData();
+      formData.append("description", values.description);
+      formData.append("image", values.image);
+      postMutation.mutate(formData);
     },
   });
+
+  //file upload logic
+  // handle fileChnage
+  //remove imagel
+  const handleFileChange = (event) => {
+    // console.log(event)
+    // get bthe file selected
+    const file = event.currentTarget.files[0];
+    // console.log(file);
+
+    //limit size
+    if (file.size > 1048576) {
+      //more than 1 mb
+      setImageErr("File sized exceed 1mb");
+      return;
+    }
+
+    //limit file types
+    if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      setImageErr("Invalid File Type...");
+    }
+
+    // set the image preview
+    formik.setFieldValue("image", file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  //REMOVE IMAGE|
+  const removeImage = () => {
+    formik.setFieldValue("image", null);
+    setImagePreview(null);
+  };
 
   //get loading state
   const isLoading = postMutation.isPending;
@@ -100,7 +143,7 @@ const CreatePost = () => {
                   type="file"
                   name="image"
                   accept="image/*"
-                  // onChange={handleFileChange}
+                  onChange={handleFileChange}
                   className="hidden"
                 />
                 <label
@@ -111,32 +154,32 @@ const CreatePost = () => {
                 </label>
               </div>
               {/* Display error message */}
-              {/* {formik.touched.image && formik.errors.image && (
-              <p className="text-sm text-red-600">{formik.errors.image}</p>
-            )} */}
+              {formik.touched.image && formik.errors.image && (
+                <p className="text-sm text-red-600">{formik.errors.image}</p>
+              )}
 
               {/* error message */}
-              {/* {imageError && (
+              {imageError && (
                 <p className="text-sm text-red-600">{imageError}</p>
-              )} */}
+              )}
 
               {/* Preview image */}
 
-              {/* {imagePreview && (
-              <div className="mt-2 relative">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="mt-2 h-24 w-24 object-cover rounded-full"
-                />
-                <button
-                  onClick={removeImage}
-                  className="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1"
-                >
-                  <FaTimesCircle className="text-red-500" />
-                </button>
-              </div>
-            )} */}
+              {imagePreview && (
+                <div className="mt-2 relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mt-2 h-24 w-24 object-cover rounded-full"
+                  />
+                  <button
+                    onClick={removeImage}
+                    className="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1"
+                  >
+                    <FaTimesCircle className="text-red-500" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Submit Button - Button to submit the form */}
