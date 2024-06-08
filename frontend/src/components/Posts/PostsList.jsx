@@ -2,6 +2,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import { deletePost, fetchAllPosts } from "../../APIServices/posts/postsAPI";
 import { Link } from "react-router-dom";
+import { FaRegCaretSquareDown } from "react-icons/fa";
+import NoDataFound from "../Alerts/NoDataFound";
+import AlertMessage from "../Alerts/AlertMessage";
 
 const PostsList = () => {
   let isPostsError = false;
@@ -38,6 +41,16 @@ const PostsList = () => {
       })
       .catch((e) => console.log(e));
   };
+
+  //show msg to user
+  if (isLoading)
+    return <AlertMessage type="loading" message="Loading please wait" />;
+  //is error
+  if (isError) return <AlertMessage type="error" message="Something happen" />;
+
+  // no post found
+
+  if (data?.listPost?.length <= 0) return <NoDataFound text="No Post Found" />;
 
   return (
     <>
