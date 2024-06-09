@@ -8,22 +8,18 @@ const storage = require("../../utils/fileUpload");
 const upload = multer({ storage });
 
 //Create POST
-postRouter.post(
-  "/posts/create",
-  upload.single("image"),
-  postController.createPost
-);
+postRouter.post("/create", upload.single("image"), postController.createPost);
 
 //GET List POST
-postRouter.get("/posts", postController.fetchAllPost);
+postRouter.get("/", postController.fetchAllPost);
 
 //Update POST
-postRouter.put("/posts/:postId", postController.updatePost);
+postRouter.put("/:postId", postController.updatePost);
 
 //GET single POST
-postRouter.get("/posts/:postId", postController.fetchPost);
+postRouter.get("/:postId", postController.fetchPost);
 
 //Delete POST
-postRouter.delete("/posts/:postId", postController.deletePost);
+postRouter.delete("/:postId", postController.deletePost);
 
 module.exports = postRouter;
